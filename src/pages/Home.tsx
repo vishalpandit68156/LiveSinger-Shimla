@@ -20,8 +20,7 @@ export default function Home() {
         jsonLd={[orgLd(), faqLd(FAQ), { '@context': 'https://schema.org', '@type': 'WebSite', name: 'LiveSinger Shimla', url: SITE_URL, potentialAction: { '@type': 'SearchAction', target: `${SITE_URL}/singers?q={query}`, 'query-input': 'required name=query' } }]} />
 
       <section className="relative overflow-hidden border-b border-line bg-gradient-to-b from-mint/70 via-white to-white">
-        <Equalizer />
-        <div className="wrap relative flex min-h-[460px] flex-col items-center justify-center pb-16 pt-10 text-center sm:py-12 sm:h-[500px] sm:min-h-0">
+        <div className="wrap relative flex min-h-[460px] flex-col items-center justify-center py-12 text-center sm:h-[500px] sm:min-h-0">
           <span className="fade-up badge badge-green">Shimla · Kufri · Mashobra · Chail</span>
           <h1 className="fade-up mt-4 max-w-3xl text-[clamp(32px,5.6vw,56px)] font-extrabold leading-[1.08]">Book live singers in Shimla</h1>
           <p className="fade-up mt-3 max-w-xl text-[17px] muted">Verified singers and bands for hotels, weddings and parties. Real prices, real reviews.</p>
@@ -129,14 +128,4 @@ const OCCASION_ICON: Record<string, LucideIcon> = {
   'bollywood-singers': Clapperboard,
   'pahari-folk-singers': Mountain,
   'corporate-event-singers': Briefcase,
-}
-
-/** Soft equalizer bars along the bottom of the banner: a quiet "live music" cue. */
-function Equalizer() {
-  const bars = Array.from({ length: 64 }, (_, i) => 18 + Math.round(Math.abs(Math.sin(i * 0.55) * Math.cos(i * 0.23)) * 70))
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 flex h-14 items-end justify-center gap-[5px] overflow-hidden sm:h-28 opacity-[.22] [mask-image:linear-gradient(to_right,transparent,#000_15%,#000_85%,transparent)]">
-      {bars.map((h, i) => <span key={i} className="eq-bar w-[5px] shrink-0 rounded-t-full bg-green" style={{ height: `${h}%`, animationDelay: `${(i % 9) * 0.13}s` }} />)}
-    </div>
-  )
 }
