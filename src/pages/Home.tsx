@@ -1,4 +1,4 @@
-import { ArrowRight, Briefcase, CalendarCheck, Clapperboard, Gem, Hotel, LayoutGrid, Mic, Mic2, Moon, Mountain, Music2, Search, ShieldCheck, Wallet, type LucideIcon } from 'lucide-react'
+import { ArrowRight, Briefcase, Clapperboard, Gem, Hotel, LayoutGrid, Mic, Mic2, Moon, Mountain, Music2, Search, type LucideIcon } from 'lucide-react'
 import { useState } from 'react'
 import { SingerCard } from '../components/SingerCard'
 import { Section, Stars, TextLink } from '../components/ui'
@@ -21,8 +21,7 @@ export default function Home() {
 
       <section className="relative overflow-hidden border-b border-line bg-gradient-to-b from-mint/70 via-white to-white">
         <div className="wrap relative flex min-h-[460px] flex-col items-center justify-center py-12 text-center sm:h-[500px] sm:min-h-0">
-          <span className="fade-up badge badge-green">Shimla · Kufri · Mashobra · Chail</span>
-          <h1 className="fade-up mt-4 max-w-3xl text-[clamp(32px,5.6vw,56px)] font-extrabold leading-[1.08]">Book live singers in Shimla</h1>
+          <h1 className="fade-up max-w-3xl text-[clamp(32px,5.6vw,56px)] font-extrabold leading-[1.08]">Book live singers in Shimla</h1>
           <p className="fade-up mt-3 max-w-xl text-[17px] muted">Verified singers and bands for hotels, weddings and parties. Real prices, real reviews.</p>
           <form className="fade-up mt-7 flex w-full max-w-2xl items-center gap-2 rounded-full border border-line bg-white p-1.5 pl-1.5 shadow-[0_10px_30px_-12px_rgba(22,163,74,.35)] focus-within:border-green/60" onSubmit={(e) => { e.preventDefault(); try { sessionStorage.setItem('lss_q', q) } catch { /* ignore */ } navigate(paths.singers) }} role="search">
             <span className="grid size-11 shrink-0 place-items-center rounded-full bg-mint text-green-dark"><Mic size={20} /></span>
@@ -31,16 +30,6 @@ export default function Home() {
             </label>
             <button className="btn btn-primary !rounded-full"><Search size={17} /><span className="hidden sm:inline">Find singers</span></button>
           </form>
-          <div className="fade-up mt-4 flex flex-wrap justify-center gap-2">
-            {LANDINGS.slice(1, 6).map((l) => { const I = OCCASION_ICON[l.slug] || Music2; return (
-              <Link key={l.slug} to={paths.landing(l.slug)} className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/80 px-3 py-1.5 text-[13px] font-medium text-ink/80 hover:border-green/50 hover:text-green-dark"><I size={14} className="text-green" />{l.h1.replace(' in Shimla', '').replace(' Singers', '')}</Link>
-            ) })}
-          </div>
-          <ul className="fade-up mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-medium text-ink/75">
-            {[[ShieldCheck, 'Verified singers'], [Wallet, 'Fixed prices'], [CalendarCheck, '30% advance to book']].map(([I, t]) => (
-              <li key={t as string} className="flex items-center gap-1.5"><I size={16} className="text-green" />{t as string}</li>
-            ))}
-          </ul>
         </div>
       </section>
 
