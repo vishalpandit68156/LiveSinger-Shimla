@@ -31,12 +31,12 @@ export default function Home() {
             </label>
             <button className="btn btn-primary !rounded-full"><Search size={17} /><span className="hidden sm:inline">Find singers</span></button>
           </form>
-          <div className="fade-up mt-4 flex flex-wrap justify-center gap-2">
+          <div className="fade-up mt-4 hidden flex-wrap justify-center gap-2 sm:flex">
             {LANDINGS.slice(1, 6).map((l) => { const I = OCCASION_ICON[l.slug] || Music2; return (
               <Link key={l.slug} to={paths.landing(l.slug)} className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white/80 px-3 py-1.5 text-[13px] font-medium text-ink/80 hover:border-green/50 hover:text-green-dark"><I size={14} className="text-green" />{l.h1.replace(' in Shimla', '').replace(' Singers', '')}</Link>
             ) })}
           </div>
-          <ul className="fade-up mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-medium text-ink/75">
+          <ul className="fade-up mt-6 hidden flex-wrap justify-center gap-x-5 sm:flex gap-y-2 text-sm font-medium text-ink/75">
             {[[ShieldCheck, 'Verified singers'], [Wallet, 'Fixed prices'], [CalendarCheck, '30% advance to book']].map(([I, t]) => (
               <li key={t as string} className="flex items-center gap-1.5"><I size={16} className="text-green" />{t as string}</li>
             ))}
