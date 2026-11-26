@@ -6,11 +6,17 @@ import { pathToFileURL } from 'node:url'
 
 const dist = path.resolve('dist')
 const { render, routes, seedData } = await import(pathToFileURL(path.resolve('dist-ssr/entry-server.js')).href)
-const SITE = (process.env.VITE_SITE_URL || 'https://livesingershimla.com').replace(/\/$/, '')
+// Same env as the Vite build: .env files + real environment variables (Vercel etc.)
+const { loadEnv } = await import('vite')
+const env = { ...loadEnv('production', process.cwd(), 'VITE_'), ...Object.fromEntries(Object.entries(process.env).filter(([k]) => k.startsWith('VITE_'))) }
+const SITE = (env.VITE_SITE_URL || 'https://livesingershimla.com').replace(/\/$/, '')
 
 async function loadData() {
-  const url = process.env.VITE_SUPABASE_URL, key = process.env.VITE_SUPABASE_ANON_KEY
-  if (!url || !key) return seedData()
+  const url = env.VITE_SUPABASE_URL, key = env.VITE_SUPABASE_ANON_KEY
+  if (!url || !key) {
+    if (env.VITE_DEMO === '1') return seedData()
+    throw new Error('Supabase env vars missing: refusing to pre-render demo singers into a production build')
+  }
   const { createClient } = await import('@supabase/supabase-js')
   const sb = createClient(url, key)
   const { data: rows, error } = await sb.from('singers').select('*, packages(*), media(*)').eq('status', 'approved')
