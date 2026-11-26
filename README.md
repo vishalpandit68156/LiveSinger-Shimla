@@ -13,7 +13,7 @@ npm run build:preview  # single-folder preview build (hash routes) in dist-previ
 Deploy `dist/` to Vercel (vercel.json included) or any static host. Set env vars from `.env.example`.
 
 ## Pages
-Public (pre-rendered, indexable): `/`, `/singers`, `/singer/<slug>`, `/shimla/<keyword-page>`, `/how-it-works`, `/join`
+Public (pre-rendered, indexable): `/`, `/blog`, `/blog/<slug>`, `/singers`, `/singer/<slug>`, `/shimla/<keyword-page>`, `/how-it-works`, `/join`
 App (no-index): `/book/<slug>`, `/login`, `/dashboard`, `/dashboard/edit/<section>`, `/admin`, `/admin/singers`, `/admin/singer/<id>`, `/admin/bookings`, `/admin/feedback`
 
 ## SEO
@@ -22,6 +22,12 @@ App (no-index): `/book/<slug>`, `/login`, `/dashboard`, `/dashboard/edit/<sectio
 - Keyword landing pages in `src/data/catalog.ts` (`LANDINGS`): live singers, wedding singers, hotel live music, Sufi, Bollywood, Pahari, corporate.
 - `sitemap.xml` and `robots.txt` are generated on build. Submit the sitemap in Google Search Console.
 - Set `VITE_SITE_URL` to the real domain before building.
+
+## Blog
+Posts are Markdown files in `src/content/blog/<slug>.md` with a front-matter block (title, description, date, keywords).
+Add a file and build: the post gets a pre-rendered page at `/blog/<slug>`, a card on `/blog` and a sitemap entry.
+With Claude Code, just ask "write a blog post about <topic>": the `write-blog-post` skill in `.claude/skills/` has the
+keyword list, structure and linking rules.
 
 ## Supabase setup
 1. Create a project (region Mumbai) at supabase.com.

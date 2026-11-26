@@ -48,7 +48,7 @@ export type Route =
   | { name: 'book'; slug: string; pkg?: string } | { name: 'login' } | { name: 'join' }
   | { name: 'dashboard'; tab: string } | { name: 'dash-edit'; section: string }
   | { name: 'admin' } | { name: 'admin-singers' } | { name: 'admin-singer'; id: string } | { name: 'admin-bookings' } | { name: 'admin-feedback' }
-  | { name: 'how' } | { name: 'notfound' }
+  | { name: 'how' } | { name: 'blog' } | { name: 'post'; slug: string } | { name: 'notfound' }
 
 export function match(path: string): Route {
   const p = path.split('/').filter(Boolean)
@@ -61,6 +61,7 @@ export function match(path: string): Route {
   if (a === 'login') return { name: 'login' }
   if (a === 'join') return { name: 'join' }
   if (a === 'how-it-works') return { name: 'how' }
+  if (a === 'blog') return b ? { name: 'post', slug: b } : { name: 'blog' }
   if (a === 'dashboard') return b === 'edit' && c ? { name: 'dash-edit', section: c } : { name: 'dashboard', tab: b ?? 'home' }
   if (a === 'admin') {
     if (b === 'singers') return { name: 'admin-singers' }
@@ -73,7 +74,7 @@ export function match(path: string): Route {
 }
 
 export const paths = {
-  home: '/', singers: '/singers', login: '/login', join: '/join', how: '/how-it-works', dashboard: '/dashboard', admin: '/admin',
+  home: '/', singers: '/singers', login: '/login', join: '/join', how: '/how-it-works', blog: '/blog', post: (slug: string) => `/blog/${slug}`, dashboard: '/dashboard', admin: '/admin',
   singer: (slug: string) => `/singer/${slug}`, book: (slug: string, pkg?: string) => `/book/${slug}${pkg ? '/' + pkg : ''}`,
   landing: (slug: string) => `/shimla/${slug}`, edit: (section: string) => `/dashboard/edit/${section}`,
   adminSinger: (id: string) => `/admin/singer/${id}`,

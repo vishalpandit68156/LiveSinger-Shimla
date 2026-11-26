@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect } from 'react'
 import { KEYWORDS, SITE_NAME, SITE_URL } from './site'
 
-export type SeoData = { title: string; description: string; path: string; image?: string; jsonLd?: object[]; noindex?: boolean }
+export type SeoData = { title: string; description: string; path: string; image?: string; jsonLd?: object[]; noindex?: boolean; type?: 'website' | 'article'; keywords?: string[] }
 // During prerender the page writes its tags here; in the browser we update <head> directly.
 export const SeoCollector = createContext<{ data?: SeoData } | null>(null)
 
@@ -31,10 +31,10 @@ export function headHtml(d: SeoData) {
   return [
     `<title>${esc(d.title)}</title>`,
     `<meta name="description" content="${esc(d.description)}">`,
-    `<meta name="keywords" content="${esc(KEYWORDS.join(', '))}">`,
+    `<meta name="keywords" content="${esc((d.keywords?.length ? d.keywords : KEYWORDS).join(', '))}">`,
     `<meta name="robots" content="${d.noindex ? 'noindex' : 'index,follow'}">`,
     `<link rel="canonical" href="${url}">`,
-    `<meta property="og:type" content="website"><meta property="og:site_name" content="${SITE_NAME}">`,
+    `<meta property="og:type" content="${d.type ?? 'website'}"><meta property="og:site_name" content="${SITE_NAME}">`,
     `<meta property="og:title" content="${esc(d.title)}"><meta property="og:description" content="${esc(d.description)}">`,
     `<meta property="og:url" content="${url}"><meta property="og:image" content="${esc(img)}"><meta property="og:locale" content="en_IN">`,
     `<meta name="twitter:card" content="summary_large_image">`,
