@@ -27,7 +27,12 @@ function AccountButton() {
     return () => { document.removeEventListener('pointerdown', close); document.removeEventListener('keydown', esc) }
   }, [open])
   if (!ready) return <span className="h-10 w-10" />
-  if (!email) return <Link to={paths.login} className="btn btn-outline btn-sm"><LogIn size={16} /> Log in</Link>
+  if (!email) return (
+    <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+      <Link to={paths.join} className="btn btn-primary btn-sm whitespace-nowrap !gap-1.5 !px-3 text-[13px] sm:!px-4 sm:text-[15px]"><Mic size={16} className="hidden sm:block" /> Register as singer</Link>
+      <Link to={paths.login} className="btn btn-outline btn-sm !px-3" aria-label="Log in"><LogIn size={16} /><span className="hidden sm:inline">Log in</span></Link>
+    </div>
+  )
   return (
     <div className="relative" ref={box}>
       <button onClick={() => setOpen(!open)} aria-label="Account menu" aria-haspopup="menu" aria-expanded={open}
@@ -49,7 +54,7 @@ function AccountButton() {
 
 export function Header() {
   const path = usePath()
-  const nav = [[paths.singers, 'Find singers'], [paths.how, 'How it works'], [paths.join, 'For singers'], [paths.blog, 'Blog']] as const
+  const nav = [[paths.singers, 'Find singers'], [paths.how, 'How it works'], [paths.blog, 'Blog']] as const
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur-lg">
       <div className="wrap flex h-16 items-center justify-between gap-4">

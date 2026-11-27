@@ -12,6 +12,8 @@ npm run build:preview  # single-folder demo build (hash routes, fake data, login
 ```
 Deploy `dist/` to Vercel (vercel.json included) or any static host. Set env vars from `.env.example`.
 
+**Hostinger (shared hosting):** env vars are baked in at build time, so build with a filled `.env`, then upload the *contents* of `dist/` (including the hidden `.htaccess`) into `public_html/`. The `.htaccess` serves the pre-rendered pages and sends app routes (`/dashboard`, `/admin`, ...) to `200.html`.
+
 ## Pages
 Public (pre-rendered, indexable): `/`, `/blog`, `/blog/<slug>`, `/singers`, `/singer/<slug>`, `/shimla/<keyword-page>`, `/how-it-works`, `/join`
 App (no-index): `/book/<slug>`, `/login`, `/dashboard`, `/dashboard/edit/<section>`, `/admin`, `/admin/singers`, `/admin/singer/<id>`, `/admin/bookings`, `/admin/feedback`

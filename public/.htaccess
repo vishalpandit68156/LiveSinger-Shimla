@@ -1,0 +1,28 @@
+# Hostinger / Apache: serve the pre-rendered pages and fall back to the app shell (200.html)
+Options -MultiViews
+DirectorySlash Off
+DirectoryIndex index.html
+RewriteEngine On
+RewriteBase /
+
+# Always HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Real files (JS, CSS, images, sitemap.xml ...)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Pre-rendered pages: /singers -> /singers/index.html
+RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
+RewriteRule ^(.+?)/?$ $1/index.html [L]
+
+# Everything else (/dashboard, /admin, /book/...) -> app shell
+RewriteRule ^ 200.html [L]
+
+<IfModule mod_headers.c>
+  # pages and the service worker must update right away; hashed files in /assets can be cached
+  <FilesMatch "\.(html|webmanifest)$|^(sw|registerSW)\.js$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

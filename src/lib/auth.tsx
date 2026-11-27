@@ -11,6 +11,8 @@ type Auth = {
 const Ctx = createContext<Auth>(null!)
 export const useAuth = () => useContext(Ctx)
 
+// The dashboard shows a "profile X% complete" toast once per login.
+const resetWelcome = () => { try { sessionStorage.removeItem('lss_completion_toast') } catch { /* ignore */ } }
 const NOT_SET_UP = 'Login is not set up yet. Please try again later.'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -47,12 +49,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!sb) {
         if (!demoAllowed) throw new Error(NOT_SET_UP)
         if (!/^\d{6}$/.test(code)) throw new Error('Enter the 6 digit code')
-        demoSession.set({ email: e.toLowerCase() }); setEmail(e.toLowerCase()); setIsAdmin(e.toLowerCase() === DEMO_ADMIN); return
+        resetWelcome(); demoSession.set({ email: e.toLowerCase() }); setEmail(e.toLowerCase()); setIsAdmin(e.toLowerCase() === DEMO_ADMIN); return
       }
       const { error } = await sb.auth.verifyOtp({ email: e.toLowerCase(), token: code, type: 'email' })
       if (error) throw error
+      resetWelcome()
     },
     async logout() {
+      resetWelcome()
       if (sb) await sb.auth.signOut()
       else demoSession.set(null)
       setEmail(null); setIsAdmin(false)
