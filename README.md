@@ -1,14 +1,14 @@
 # LiveSinger Shimla
 
 Mobile-first website + PWA for booking live singers in Shimla.
-React 19, Vite, Tailwind v4, pre-rendered pages for SEO, Supabase backend (optional: runs in demo mode without it).
+React 19, Vite, Tailwind v4, pre-rendered pages for SEO, Supabase backend (email-code login + real data). Local dev without `.env` runs a demo.
 
 ## Run
 ```
 npm install
 npm run dev            # local dev (demo mode if no .env)
-npm run build          # production build: dist/ with pre-rendered HTML, sitemap.xml, robots.txt
-npm run build:preview  # single-folder preview build (hash routes) in dist-preview/
+npm run build          # production build: needs the Supabase env vars, stops with an error without them
+npm run build:preview  # single-folder demo build (hash routes, fake data, login shortcuts) in dist-preview/
 ```
 Deploy `dist/` to Vercel (vercel.json included) or any static host. Set env vars from `.env.example`.
 
@@ -25,12 +25,13 @@ App (no-index): `/book/<slug>`, `/login`, `/dashboard`, `/dashboard/edit/<sectio
 
 ## Supabase setup
 1. Create a project (region Mumbai) at supabase.com.
-2. SQL Editor → run `supabase/migrations/001_init.sql`.
-3. Authentication → Email templates → Magic Link: include `{{ .Token }}` so users get a 6 digit code.
-4. Authentication → SMTP: connect Resend or Brevo (the built-in sender only allows a few emails per hour).
-5. Copy Project URL + anon key into `.env` (see `.env.example`).
-6. Make yourself admin (after logging in once):
-   `insert into admins(user_id) select id from auth.users where email = 'you@example.com';`
+2. SQL Editor → run `supabase/migrations/001_init.sql`, then `supabase/migrations/002_admin_emails.sql`.
+3. Authentication → Emails → Templates → **Magic Link**: subject `Your LiveSinger Shimla login code`, body = `supabase/templates/login-code.html` (it shows `{{ .Token }}`, the code).
+4. Authentication → Emails → SMTP Settings: connect Resend or Brevo (the built-in sender only allows a few emails per hour).
+5. Authentication → URL Configuration: Site URL = your domain.
+6. Project Settings → API: copy Project URL + anon public key into `.env` locally and into the hosting env vars (Vercel → Settings → Environment Variables), then redeploy.
+7. Make yourself admin (email in lowercase, works before or after your first login):
+   `insert into public.admin_emails(email) values ('you@gmail.com');`
 
 ## Approval and contract emails
 Approving a singer in the admin dashboard inserts two rows in `email_queue`: the approval email (send now) and the contract email (send after 24 hours).
@@ -54,6 +55,7 @@ select cron.schedule('send-emails', '*/10 * * * *', $$
 - Anyone can send a booking request (no login), only admins can read bookings.
 - Uploads go to `singer-media/<user_id>/…`; ID proofs to the private `singer-private` bucket.
 
-## Demo mode
-Without Supabase env vars, data is stored in the browser and seeded with 8 live demo singers and 2 pending registrations.
-Login accepts any 6 digit code. `admin@livesingershimla.com` opens the admin dashboard.
+## Demo mode (dev and `build:preview` only)
+With `npm run dev` and no Supabase env vars, or with `npm run build:preview` (`VITE_DEMO=1`), data is stored in the browser and seeded with 8 demo singers and 2 pending registrations.
+Login accepts any 6 digit code and the "Preview shortcuts" buttons appear. `admin@livesingershimla.com` opens the admin dashboard.
+A production build (`npm run build`) never uses demo data or shortcuts.
