@@ -49,7 +49,7 @@ function AccountButton() {
 
 export function Header() {
   const path = usePath()
-  const nav = [[paths.singers, 'Find singers'], [paths.how, 'How it works'], [paths.join, 'For singers']] as const
+  const nav = [[paths.singers, 'Find singers'], [paths.how, 'How it works'], [paths.join, 'For singers'], [paths.blog, 'Blog']] as const
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-white/90 backdrop-blur-lg">
       <div className="wrap flex h-16 items-center justify-between gap-4">
@@ -105,6 +105,7 @@ export function Footer() {
           <h3 className="text-sm font-bold">Company</h3>
           <ul className="mt-3 space-y-2 text-sm muted">
             <li><Link to={paths.how} className="hover:text-ink">How booking works</Link></li>
+            <li><Link to={paths.blog} className="hover:text-ink">Blog</Link></li>
             <li><Link to={paths.join} className="hover:text-ink">Join as a singer</Link></li>
             <li><Link to={paths.login} className="hover:text-ink">Log in</Link></li>
           </ul>

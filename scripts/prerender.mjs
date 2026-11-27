@@ -43,6 +43,6 @@ for (const r of list) {
 }
 const indexable = list.filter((r) => !['/login'].includes(r))
 const today = new Date().toISOString().slice(0, 10)
-fs.writeFileSync(path.join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexable.map((r) => `  <url><loc>${SITE}${r === '/' ? '/' : r}</loc><lastmod>${today}</lastmod><priority>${r === '/' ? '1.0' : r.startsWith('/shimla') ? '0.9' : '0.7'}</priority></url>`).join('\n')}\n</urlset>\n`)
+fs.writeFileSync(path.join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${indexable.map((r) => `  <url><loc>${SITE}${r === '/' ? '/' : r}</loc><lastmod>${today}</lastmod><priority>${r === '/' ? '1.0' : r.startsWith('/shimla') ? '0.9' : r.startsWith('/blog') ? '0.8' : '0.7'}</priority></url>`).join('\n')}\n</urlset>\n`)
 fs.writeFileSync(path.join(dist, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /dashboard\nDisallow: /admin\nDisallow: /book/\nDisallow: /login\n\nSitemap: ${SITE}/sitemap.xml\n`)
 console.log(`prerendered ${list.length} pages`)

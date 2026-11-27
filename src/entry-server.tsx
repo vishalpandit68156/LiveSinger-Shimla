@@ -1,5 +1,6 @@
 import { renderToString } from 'react-dom/server'
 import { LANDINGS } from './data/catalog'
+import { POSTS } from './lib/blog'
 import type { PublicData } from './lib/data'
 import { headHtml, SeoCollector, type SeoData } from './lib/seo'
 import Root from './Root'
@@ -11,7 +12,7 @@ export function render(path: string, data: PublicData) {
 }
 
 export function routes(data: PublicData) {
-  return ['/', '/singers', '/how-it-works', '/join', '/login', ...LANDINGS.map((l) => `/shimla/${l.slug}`), ...data.singers.map((s) => `/singer/${s.slug}`)]
+  return ['/', '/singers', '/how-it-works', '/blog', ...POSTS.map((p) => `/blog/${p.slug}`), '/join', '/login', ...LANDINGS.map((l) => `/shimla/${l.slug}`), ...data.singers.map((s) => `/singer/${s.slug}`)]
 }
 export { seedData } from './lib/data'
 export { toSinger } from './lib/repo/supabase'

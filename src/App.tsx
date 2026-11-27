@@ -3,6 +3,7 @@ import { LANDINGS } from './data/catalog'
 import { usePublic } from './lib/data'
 import { match, usePath } from './lib/router'
 import { AdminBookings, AdminFeedback, AdminGate, AdminOverview, AdminSingerDetail, AdminSingers } from './pages/admin/Admin'
+import { BlogIndex, BlogPost } from './pages/Blog'
 import Book from './pages/Book'
 import Dashboard from './pages/dashboard/Dashboard'
 import EditSection from './pages/dashboard/EditSection'
@@ -24,6 +25,8 @@ export default function App() {
     case 'home': return <PublicShell><Home /></PublicShell>
     case 'singers': return <PublicShell><Singers /></PublicShell>
     case 'how': return <PublicShell><HowItWorks /></PublicShell>
+    case 'blog': return <PublicShell><BlogIndex /></PublicShell>
+    case 'post': return <PublicShell><BlogPost slug={r.slug} /></PublicShell>
     case 'landing': { const l = LANDINGS.find((x) => x.slug === r.slug); return <PublicShell>{l ? <LandingPage l={l} /> : <NotFound />}</PublicShell> }
     case 'singer': { const s = find(r.slug); return <><Header /><main>{s ? <SingerPage s={s} /> : ready ? <NotFound /> : wait}</main></> }
     case 'book': { const s = find(r.slug); return s ? <Book s={s} pkg={r.pkg} /> : <><Header />{ready ? <NotFound /> : wait}</> }
