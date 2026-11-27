@@ -1,5 +1,5 @@
 import qrcode from 'qrcode-generator'
-import { AlertCircle, CalendarCheck, CalendarDays, CheckCircle2, ChevronRight, Circle, Clock, Copy, Download, Eye, Home, IndianRupee, Lightbulb, LifeBuoy, Mail, MapPin, MessageCircle, PartyPopper, Send, Share2, Star, UserRound, Users } from 'lucide-react'
+import { AlertCircle, X, CalendarCheck, CalendarDays, CheckCircle2, ChevronRight, Circle, Clock, Copy, Download, Eye, Home, IndianRupee, Lightbulb, LifeBuoy, Mail, MapPin, MessageCircle, PartyPopper, Send, Share2, Star, UserRound, Users } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { DashShell, Empty, Panel, Stat, type NavItem } from '../../components/DashShell'
 import { LoginForm } from '../../components/LoginForm'
@@ -51,7 +51,36 @@ export default function Dashboard({ tab }: { tab: string }) {
       action={<span className="hidden sm:inline-flex"><StatusBadge s={s.status} /></span>}>
       <Seo title="Singer dashboard – LiveSinger Shimla" description="Manage your singer profile" path={paths.dashboard} noindex />
       <div className="sheet-in" key={tab}>{body}</div>
+      <CompletionToast s={s} p={priv} />
     </DashShell>
+  )
+}
+
+/* ───────── Profile completion toast (once per visit, after login) ───────── */
+const TOAST_KEY = 'lss_completion_toast'
+function CompletionToast({ s, p }: { s: Singer; p: SingerPrivate }) {
+  const { pct, sections } = completion(s, p)
+  const next = sections.find((x) => !x.done)
+  const [open, setOpen] = useState(() => { try { return sessionStorage.getItem(TOAST_KEY) !== '1' } catch { return false } })
+  useEffect(() => {
+    try { sessionStorage.setItem(TOAST_KEY, '1') } catch { /* ignore */ }
+    const t = setTimeout(() => setOpen(false), 7000)
+    return () => clearTimeout(t)
+  }, [])
+  if (!open) return null
+  return (
+    <div role="status" aria-live="polite" className="sheet-in fixed inset-x-3 top-3 z-50 mx-auto max-w-sm rounded-2xl border border-line bg-white p-3 shadow-xl sm:top-5">
+      <div className="flex items-center gap-3">
+        <Progress pct={pct} size={48} />
+        <div className="min-w-0 flex-1">
+          <b className="block text-[15px]">{pct === 100 ? 'Your profile is 100% complete' : `Your profile is ${pct}% complete`}</b>
+          {next
+            ? <Link to={paths.edit(next.key)} onClick={() => setOpen(false)} className="text-sm font-semibold text-green-dark">Next: {next.title} →</Link>
+            : <span className="text-sm muted">Great job. Clients see your full profile.</span>}
+        </div>
+        <button onClick={() => setOpen(false)} className="grid size-9 shrink-0 place-items-center rounded-full hover:bg-soft" aria-label="Close"><X size={18} /></button>
+      </div>
+    </div>
   )
 }
 
